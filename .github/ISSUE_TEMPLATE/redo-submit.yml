@@ -1,0 +1,43 @@
+name: 提交重做答案
+description: 提交重做后的错题答案
+labels: [redo]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 请按照以下格式提交重做答案
+        1. 选择年级和错题ID
+        2. 上传你的解答图片
+  
+  - type: dropdown
+    id: grade
+    attributes:
+      label: 选择年级
+      options:
+        - 初一
+        - 初二
+        - 初三
+        - 高一
+        - 高二
+        - 高三
+    validations:
+      required: true
+  
+  - type: input
+    id: question_id
+    attributes:
+      label: 错题ID
+      description: "从错题查看页面复制的ID（例如：1665678912345_abc123）"
+      placeholder: 输入错题ID
+    validations:
+      required: true
+  
+  - type: input
+    id: redo_img
+    attributes:
+      label: 重做答案图片URL
+      placeholder: 上传图片到图床后粘贴链接
+      description: |
+        或者直接将图片拖拽到下方区域上传
+    validations:
+      required: true

@@ -1,0 +1,90 @@
+name: Process Collection
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  archive:
+    if: contains(github.event.issue.labels.*.name, 'collection')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取所有历史提交，以便能够访问文件历史
+    
+      - name: Extract issue data
+        id: extract-data
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body = context.payload.issue.body;
+            
+            // 提取年级
+            const gradeRegex = /grade: '(.+?)'/;
+            const gradeMatch = body.match(gradeRegex);
+            const grade = gradeMatch ? gradeMatch[1] : '';
+            
+            // 提取错题图片URL
+            const imgRegex = /question_img: '(.+?)'/;
+            const imgMatch = body.match(imgRegex);
+            const imgUrl = imgMatch ? imgMatch[1] : '';
+            
+            // 提取解析内容
+            const answerRegex = /answer: '''([\s\S]*?)'''/s;
+            const answerMatch = body.match(answerRegex);
+            const answer = answerMatch ? answerMatch[1] : '';
+            
+            // 生成唯一ID (时间戳+随机字符)
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(2, 8);
+            const id = `${timestamp}_${random}`;
+            
+            // 返回结果
+            return { 
+              grade: grade || '',
+              imgUrl: imgUrl || '',
+              answer: answer || '',
+              id: id || ''
+            };
+    
+      - name: Save files
+        env:
+          GRADE: ${{ steps.extract-data.outputs.grade }}
+          IMG_URL: ${{ steps.extract-data.outputs.imgUrl }}
+          ANSWER: ${{ steps.extract-data.outputs.answer }}
+          ID: ${{ steps.extract-data.outputs.id }}
+          REPO_NAME: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          # 创建年级目录（如果不存在）
+          mkdir -p COLLECTIONS/"$GRADE"
+          
+          # 下载错题图片
+          if [ -n "$IMG_URL" ]; then
+            curl -L -o "COLLECTIONS/$GRADE/question_$ID.png" "$IMG_URL"
+            if [ $? -ne 0 ]; then
+              echo "图片下载失败！" > comment.txt
+              gh issue comment $ISSUE_NUMBER --body "$(cat comment.txt)"
+              exit 1
+            fi
+          fi
+          
+          # 创建解析文档
+          if [ -n "$ANSWER" ]; then
+            echo -e "$ANSWER" > "COLLECTIONS/$GRADE/answer_$ID.md"
+          fi
+          
+          # 添加新生成的错题ID到issue评论
+          echo "错题已添加！ID: $ID\n在仓库中的路径：[查看](https://github.com/$REPO_NAME/blob/main/COLLECTIONS/$GRADE)" > comment.txt
+          gh issue comment $ISSUE_NUMBER --body "$(cat comment.txt)"
+    
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add COLLECTIONS/
+          git commit -m "添加新错题 $ID" || echo "没有更改可提交"
+          git push

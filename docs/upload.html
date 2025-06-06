@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传错题</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>上传错题</h1>
+        <a href="index.html" class="back-btn">返回首页</a>
+    </header>
+    
+    <main>
+        <div id="upload-container">
+            <div id="collection-upload" style="display: none;">
+                <h2>添加新错题</h2>
+                <form id="collection-form">
+                    <div class="form-group">
+                        <label for="grade">年级</label>
+                        <select id="grade" required>
+                            <option value="">请选择年级</option>
+                            <option value="初一">初一</option>
+                            <option value="初二">初二</option>
+                            <option value="初三">初三</option>
+                            <option value="高一">高一</option>
+                            <option value="高二">高二</option>
+                            <option value="高三">高三</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="img-upload">错题图片</label>
+                        <div class="upload-area" id="img-upload-area">
+                            <i class="upload-icon">📁</i>
+                            <p>点击或拖放图片到这里</p>
+                            <input type="file" id="img-upload" accept="image/*">
+                        </div>
+                        <div id="img-preview"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="answer">错题解析</label>
+                        <textarea id="answer" rows="5" placeholder="请输入错题解析..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn primary">提交错题</button>
+                </form>
+            </div>
+            
+            <div id="redo-upload" style="display: none;">
+                <h2>提交重做答案</h2>
+                <form id="redo-form">
+                    <div class="form-group">
+                        <label>年级: <span id="redo-grade-display"></span></label>
+                        <input type="hidden" id="redo-grade">
+                        <input type="hidden" id="question-id">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="redo-img">解答图片</label>
+                        <div class="upload-area" id="redo-upload-area">
+                            <i class="upload-icon">📁</i>
+                            <p>点击或拖放解答图片到这里</p>
+                            <input type="file" id="redo-img" accept="image/*">
+                        </div>
+                        <div id="redo-preview"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn success">提交解答</button>
+                </form>
+            </div>
+            
+            <div id="upload-status"></div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 错题重做系统 | 基于 GitHub 构建</p>
+    </footer>
+    
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

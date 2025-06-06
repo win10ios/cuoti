@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浏览错题</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>浏览错题</h1>
+        <a href="index.html" class="back-btn">返回首页</a>
+    </header>
+    
+    <main>
+        <div class="filter-section">
+            <h2>选择年级:</h2>
+            <div class="grade-buttons">
+                <button class="grade-btn active" data-grade="all">全部</button>
+                <button class="grade-btn" data-grade="初一">初一</button>
+                <button class="grade-btn" data-grade="初二">初二</button>
+                <button class="grade-btn" data-grade="初三">初三</button>
+                <button class="grade-btn" data-grade="高一">高一</button>
+                <button class="grade-btn" data-grade="高二">高二</button>
+                <button class="grade-btn" data-grade="高三">高三</button>
+            </div>
+        </div>
+        
+        <div id="browse-container">
+            <div class="questions-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>加载错题中...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 错题重做系统 | 基于 GitHub 构建</p>
+    </footer>
+    
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

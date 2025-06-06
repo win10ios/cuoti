@@ -1,0 +1,54 @@
+name: 提交新错题
+description: 上传错题及解析
+labels: [collection]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 请按照以下格式提交错题
+        1. 选择题级
+        2. 上传错题图片
+        3. 填写详细解析
+        
+        提示：你可以将图片直接拖拽到此区域上传
+  
+  - type: dropdown
+    id: grade
+    attributes:
+      label: 选择年级
+      description: 请选择错题所属的年级
+      options:
+        - 初一
+        - 初二
+        - 初三
+        - 高一
+        - 高二
+        - 高三
+    validations:
+      required: true
+  
+  - type: input
+    id: question_img
+    attributes:
+      label: 错题图片URL
+      placeholder: 上传图片到任意图床后粘贴链接
+      description: |
+        或者直接将图片拖拽到下方区域上传，然后将生成的链接复制到此
+    validations:
+      required: true
+  
+  - type: textarea
+    id: answer
+    attributes:
+      label: 解析内容
+      description: 请详细描述解题思路和知识点
+      placeholder: |
+        1. 题目类型：选择题/填空题/应用题...
+        2. 考察知识点：...
+        3. 解题思路：
+           - 第一步...
+           - 第二步...
+        4. 正确答案：...
+      render: markdown
+    validations:
+      required: true

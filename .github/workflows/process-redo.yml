@@ -1,0 +1,87 @@
+name: Process Redo
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  process:
+    if: contains(github.event.issue.labels.*.name, 'redo')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+    
+      - name: Extract issue data
+        id: extract-data
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body = context.payload.issue.body;
+            
+            // 提取年级
+            const gradeRegex = /grade: '(.+?)'/;
+            const gradeMatch = body.match(gradeRegex);
+            const grade = gradeMatch ? gradeMatch[1] : '';
+            
+            // 提取错题ID
+            const idRegex = /question_id: '(.+?)'/;
+            const idMatch = body.match(idRegex);
+            const questionId = idMatch ? idMatch[1] : '';
+            
+            // 提取重做图片URL
+            const imgRegex = /redo_img: '(.+?)'/;
+            const imgMatch = body.match(imgRegex);
+            const imgUrl = imgMatch ? imgMatch[1] : '';
+            
+            return { 
+              grade: grade || '',
+              questionId: questionId || '',
+              imgUrl: imgUrl || ''
+            };
+    
+      - name: Save redo
+        env:
+          GRADE: ${{ steps.extract-data.outputs.grade }}
+          QID: ${{ steps.extract-data.outputs.questionId }}
+          IMG_URL: ${{ steps.extract-data.outputs.imgUrl }}
+          USER: ${{ github.actor }}
+          REPO: ${{ github.repository }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+        run: |
+          # 检查错题文件是否存在
+          if [ ! -f "COLLECTIONS/$GRADE/question_$QID.png" ] && [ ! -f "COLLECTIONS/$GRADE/question_$QID.jpg" ]; then
+            echo "错误：找不到错题ID: $QID" > comment.txt
+            gh issue comment $ISSUE_NUM --body "$(cat comment.txt)"
+            exit 1
+          fi
+          
+          # 创建年级目录
+          mkdir -p REDO/"$GRADE"
+          
+          # 下载重做答案
+          curl -L -o "REDO/$GRADE/${USER}_${QID}.png" "$IMG_URL"
+          
+          # 检查是否成功下载
+          if [ $? -ne 0 ]; then
+            echo "重做答案图片下载失败！" > comment.txt
+            gh issue comment $ISSUE_NUM --body "$(cat comment.txt)"
+            exit 1
+          fi
+          
+          # 添加解析查看链接到issue评论
+          COLLECTION_URL="https://github.com/$REPO/blob/main/COLLECTIONS/$GRADE/answer_${QID}.md"
+          REDO_URL="https://github.com/$REPO/blob/main/REDO/$GRADE/${USER}_${QID}.png"
+          echo -e "重做答案已保存！\n原始解析：[点击查看]($COLLECTION_URL)\n你的答案：[点击查看]($REDO_URL)" > comment.txt
+          gh issue comment $ISSUE_NUM --body "$(cat comment.txt)"
+    
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add REDO/
+          git commit -m "$USER 提交重做题 $QID" || echo "没有更改可提交"
+          git push
