@@ -187,44 +187,121 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        /* 错误信息 */
-        .error-container {
-            background-color: white;
+        /* 使用指南 */
+        .how-to {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 40px 30px;
+            margin-top: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .how-to h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .how-to h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), #8d6bc9);
+            border-radius: 3px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            min-width: 36px;
+            height: 36px;
+            background: linear-gradient(to bottom right, var(--primary), #8d6bc9);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            margin-top: 3px;
+            box-shadow: 0 3px 6px rgba(111, 66, 193, 0.3);
+        }
+
+        .step-content h3 {
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .step-content p {
+            color: var(--secondary);
+            line-height: 1.6;
+        }
+
+        /* 年级展示 */
+        .grades-section {
+            margin-top: 50px;
+            background: linear-gradient(to right, rgba(111, 66, 193, 0.05), rgba(111, 66, 193, 0.03));
             border-radius: 10px;
             padding: 30px;
-            margin: 40px 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 5px solid #dc3545;
         }
-        
-        .error-container h2 {
-            color: #dc3545;
-            margin-bottom: 20px;
-        }
-        
-        .error-steps {
-            list-style-type: none;
-            margin: 20px 0;
-            padding: 0;
-        }
-        
-        .error-steps li {
-            padding: 10px 15px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            border-left: 3px solid #dc3545;
-        }
-        
-        .step-number {
-            display: inline-block;
-            width: 25px;
-            height: 25px;
-            background: #dc3545;
-            color: white;
+
+        .grades-section h2 {
             text-align: center;
-            border-radius: 50%;
-            margin-right: 10px;
+            color: var(--primary);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .grades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .grade-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 20px 15px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+        }
+
+        .grade-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: rgba(111, 66, 193, 0.3);
+        }
+
+        .grade-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .grade-title {
+            font-weight: 600;
+            color: var(--primary);
         }
 
         /* 页脚 */
@@ -278,10 +355,34 @@
             color: var(--secondary);
         }
 
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feature-card, .step, .grade-card {
+            animation: fadeIn 0.6s forwards;
+            opacity: 0;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+        .step:nth-child(4) { animation-delay: 0.4s; }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .features {
                 grid-template-columns: 1fr;
+            }
+            
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 25px;
             }
             
             header {
@@ -297,6 +398,25 @@
                 align-items: center;
             }
         }
+
+        /* 小屏幕优化 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .feature-card {
+                padding: 25px 15px;
+            }
+            
+            .how-to {
+                padding: 30px 20px;
+            }
+            
+            .grade-card {
+                padding: 15px 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -306,78 +426,125 @@
     </header>
     
     <div class="container">
-        <div class="error-container">
-            <h2>❌ 添加错题时出现问题</h2>
-            <p>在您尝试添加错题或提交答案时，出现了访问错误。请按照以下步骤解决：</p>
+        <section class="intro">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value">2000+</div>
+                    <div class="stat-label">错题收集</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">年级覆盖</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">99%</div>
+                    <div class="stat-label">高效复习</div>
+                </div>
+            </div>
             
-            <ul class="error-steps">
-                <li>
-                    <span class="step-number">1</span>
-                    确认您使用的是正确的仓库链接：
-                    <code>https://github.com/win10ios/cuoti-system</code>
-                </li>
-                <li>
-                    <span class="step-number">2</span>
-                    检查仓库目录是否包含以下结构：
-                    <pre>
-github_workflows/
-├── process-collection.yml
-└── process-redo.yml
-issue_templates/
-├── new-collection.yml
-└── redo-submit.yml
-COLLECTIONS/
-└── [年级目录]
-REDO/
-└── [年级目录]
-docs/
-└── index.html</pre>
-                </li>
-                <li>
-                    <span class="step-number">3</span>
-                    在GitHub仓库设置 → 页面 → 选择源为 <strong>main分支/docs</strong>
-                </li>
-                <li>
-                    <span class="step-number">4</span>
-                    确保您有权访问该仓库（公开仓库）
-                </li>
-            </ul>
-        </div>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>错题收集</h3>
+                    <p>按年级分类整理错题图片和详细解析</p>
+                    <a href="https://win10ios.github.io/cuoti/upload.html" class="btn primary" id="addBtn">
+                        <i>➕</i> 添加错题
+                    </a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">✏️</div>
+                    <h3>错题重做</h3>
+                    <p>选择错题进行练习并提交答案</p>
+                    <a href="https://win10ios.github.io/cuoti/upload.html" class="btn success" id="redoBtn">
+                        <i>📝</i> 提交答案
+                    </a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>错题管理</h3>
+                    <p>在 GitHub 仓库中管理所有错题</p>
+                    <a href="https://win10ios.github.io/cuoti/upload.html" class="btn secondary" id="repoBtn">
+                        <i>🔍</i> 访问仓库
+                    </a>
+                </div>
+            </div>
+        </section>
         
-        <section class="features">
-            <div class="feature-card">
-                <div class="feature-icon">📚</div>
-                <h3>错题收集</h3>
-                <p>按年级分类整理错题图片和详细解析</p>
-                <a href="#" class="btn primary" id="addBtn">
-                    <i>➕</i> 添加错题
-                </a>
+        <section class="how-to">
+            <h2>使用指南</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>添加新错题</h3>
+                        <p>点击"添加错题"按钮，选择年级并填写错题信息和解析</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>查看错题库</h3>
+                        <p>在仓库中查看已保存的错题，查找需要练习的题目</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>重做错题</h3>
+                        <p>找到需要练习的错题，记录其ID后提交你的解答</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>查看解析</h3>
+                        <p>在提交重做答案后，系统会自动提供原始解析链接</p>
+                    </div>
+                </div>
             </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">✏️</div>
-                <h3>错题重做</h3>
-                <p>选择错题进行练习并提交答案</p>
-                <a href="#" class="btn success" id="redoBtn">
-                    <i>📝</i> 提交答案
-                </a>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>错题管理</h3>
-                <p>在 GitHub 仓库中管理所有错题</p>
-                <a href="#" class="btn secondary" id="repoBtn">
-                    <i>🔍</i> 访问仓库
-                </a>
+        </section>
+        
+        <section class="grades-section">
+            <h2>年级分类</h2>
+            <div class="grades-grid">
+                <div class="grade-card">
+                    <div class="grade-icon">7</div>
+                    <div class="grade-title">初一</div>
+                </div>
+                <div class="grade-card">
+                    <div class="grade-icon">8</div>
+                    <div class="grade-title">初二</div>
+                </div>
+                <div class="grade-card">
+                    <div class="grade-icon">9</div>
+                    <div class="grade-title">初三</div>
+                </div>
+                <div class="grade-card">
+                    <div class="grade-icon">1</div>
+                    <div class="grade-title">高一</div>
+                </div>
+                <div class="grade-card">
+                    <div class="grade-icon">2</div>
+                    <div class="grade-title">高二</div>
+                </div>
+                <div class="grade-card">
+                    <div class="grade-icon">3</div>
+                    <div class="grade-title">高三</div>
+                </div>
             </div>
         </section>
     </div>
     
     <footer>
         <div class="container">
-            <p>访问仓库: <a href="#" id="repoLink">github.com/win10ios/cuoti-system</a></p>
-            <p>&copy; 2023 错题重做系统 | 基于 GitHub 构建</p>
+            <p>通过错题重做系统，你可以持续追踪自己的学习弱点，提高学习效率</p>
+            <p>访问仓库: <a href="#" id="repoLink">github.com/你的用户名/cuoti-system</a></p>
+            <p>&copy; 20235错题重做系统 | 基于 GitHub 构建</p>
         </div>
     </footer>
     
@@ -387,27 +554,34 @@ docs/
             // 获取当前仓库URL
             const currentPath = window.location.href;
             const usernameMatch = currentPath.match(/https?:\/\/github\.com\/([^\/]+)/);
-            const username = usernameMatch ? usernameMatch[1] : 'win10ios';
-            
-            // 正确生成问题模板链接
-            const addIssueLink = `https://github.com/${username}/cuoti-system/issues/new?assignees=&labels=&template=new-collection.yml&title=`;
-            const redoIssueLink = `https://github.com/${username}/cuoti-system/issues/new?assignees=&labels=&template=redo-submit.yml&title=`;
-            const repoLink = `https://github.com/${username}/cuoti-system`;
+            const username = usernameMatch ? usernameMatch[1] : 'your-username';
             
             // 更新链接
-            document.getElementById('repoLink').href = repoLink;
+            document.getElementById('repoLink').href = `https://github.com/${username}/cuoti-system`;
             document.getElementById('repoLink').textContent = `github.com/${username}/cuoti-system`;
             
-            document.getElementById('addBtn').href = addIssueLink;
-            document.getElementById('redoBtn').href = redoIssueLink;
-            document.getElementById('repoBtn').href = repoLink;
+            document.getElementById('addBtn').href = `https://github.com/${username}/cuoti-system/issues/new?template=new-collection.yml`;
+            document.getElementById('redoBtn').href = `https://github.com/${username}/cuoti-system/issues/new?template=redo-submit.yml`;
+            document.getElementById('repoBtn').href = `https://github.com/${username}/cuoti-system`;
             
-            // 更新年份
-            const yearEl = document.querySelector('footer p:last-child');
-            if (yearEl) {
-                const currentYear = new Date().getFullYear();
-                yearEl.innerHTML = yearEl.innerHTML.replace('2023', `2023-${currentYear}`);
+            // 添加点击动画效果
+            const cards = document.querySelectorAll('.grade-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            // 模拟错题统计
+            function updateStats() {
+                const collectionFolders = document.querySelectorAll('.grade-card').length;
+                document.querySelector('.stat-value').textContent = collectionFolders * 100 + '+';
             }
+            
+            updateStats();
         });
     </script>
 </body>
